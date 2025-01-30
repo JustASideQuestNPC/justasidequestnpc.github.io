@@ -1,0 +1,93 @@
+<html>
+  <head>
+    <!-- Grab p5.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"
+      integrity="sha512-N4kV7GkNv7QR7RX9YF/olywyIgIwNvfEe2nZtfyj73HdjCUkAfOBDbcuJ/cTaN04JKRnw1YG1wnUyNKMsNgg3g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"
+      integrity="sha512-WzkwpdWEMAY/W8WvP9KS2/VI6zkgejR4/KTxTl4qHx0utqeyVE0JY+S1DlMuxDChC7x0oXtk/ESji6a0lP/Tdg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer">
+    </script>
+
+    <!-- Grab the fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+
+    <style>
+      /* one dark theme palette */
+      :root {
+        --background: #24233b;
+        --black: #0e0d21;
+        --dark-gray: #3e3e5e;
+        --light-gray: #a6b3cc;
+        --white: #d9e9eb;
+        --red: #ff5458;
+        --light-red: #ff8080;
+        --green: #62d196;
+        --light-green: #95ffa4;
+        --orange: #ffb378;
+        --yellow: #ffe9aa;
+        --blue: #3a70e6;
+        --light-blue: #91ddff;
+        --purple: #906cff;
+        --light-purple: #c991e1;
+        --teal: #3cb6c9;
+        --cyan: #4ff7db;
+        --transparent: #00000000;
+      }
+
+      body {
+        background-color: var(--background);
+        margin: 15px 30px 10px 30px;
+      }
+
+      .canvas-container {
+        margin: 5px 0px;
+      }
+
+      .back-to-home {
+        color: var(--light-purple);
+        font-family: "Red Hat Display", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 500;
+        font-style: normal;
+        font-size: 25px;
+
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-decoration-color: var(--transparent);
+        transition: text-decoration 0.2s ease;
+      }
+
+      .back-to-home:hover {
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-decoration-color: var(--light-purple);
+      }
+
+      h3 {
+        color: var(--orange);
+        font-family: "Source Code Pro", monospace;
+        font-optical-sizing: auto;
+        font-weight: 500;
+        font-style: normal;
+      }
+
+    </style>
+  </head>
+  <body>
+    <a class="back-to-home" href="../../index.html">back to home</a>
+
+    <!-- Main Project Code -->
+    <div class="canvas-container">
+      <script src="build/build.js"></script>
+    </div>
+
+    <h3>readme</h3>
+    <h3>stats</h3>
+  </body>
+</html>

@@ -1,15 +1,17 @@
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
-    if (kind === "m") throw new TypeError("Private method is not writable");
-    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
-    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
-    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to set private field on non-instance");
+    }
+    privateMap.set(receiver, value);
+    return value;
 };
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
-    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
-    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
-    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to get private field on non-instance");
+    }
+    return privateMap.get(receiver);
 };
-var _Maze_cellGrid, _Maze_visitedCells, _Maze_cellPath, _Maze_width, _Maze_height, _Maze_displayWidth, _Maze_displayHeight, _Maze_generated, _Maze_hasWatched;
+var _cellGrid, _visitedCells, _cellPath, _width, _height, _displayWidth, _displayHeight, _generated, _hasWatched;
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 600;
 const MAZE_WIDTH = 15;
@@ -39,32 +41,32 @@ let stepButton;
 let watchButton;
 class Maze {
     constructor(mazeWidth, mazeHeight, displayWidth, displayHeight) {
-        _Maze_cellGrid.set(this, void 0);
-        _Maze_visitedCells.set(this, []);
-        _Maze_cellPath.set(this, []);
-        _Maze_width.set(this, void 0);
-        _Maze_height.set(this, void 0);
-        _Maze_displayWidth.set(this, void 0);
-        _Maze_displayHeight.set(this, void 0);
-        _Maze_generated.set(this, void 0);
-        _Maze_hasWatched.set(this, false);
+        _cellGrid.set(this, void 0);
+        _visitedCells.set(this, []);
+        _cellPath.set(this, []);
+        _width.set(this, void 0);
+        _height.set(this, void 0);
+        _displayWidth.set(this, void 0);
+        _displayHeight.set(this, void 0);
+        _generated.set(this, void 0);
+        _hasWatched.set(this, false);
         this.paused = true;
         this.watchMode = false;
-        __classPrivateFieldSet(this, _Maze_width, mazeWidth, "f");
-        __classPrivateFieldSet(this, _Maze_height, mazeHeight, "f");
-        __classPrivateFieldSet(this, _Maze_displayWidth, displayWidth, "f");
-        __classPrivateFieldSet(this, _Maze_displayHeight, displayHeight, "f");
+        __classPrivateFieldSet(this, _width, mazeWidth);
+        __classPrivateFieldSet(this, _height, mazeHeight);
+        __classPrivateFieldSet(this, _displayWidth, displayWidth);
+        __classPrivateFieldSet(this, _displayHeight, displayHeight);
         this.reset();
     }
     reset() {
-        __classPrivateFieldSet(this, _Maze_generated, false, "f");
-        __classPrivateFieldSet(this, _Maze_cellGrid, [], "f");
-        __classPrivateFieldSet(this, _Maze_visitedCells, [], "f");
-        __classPrivateFieldSet(this, _Maze_cellPath, [], "f");
-        __classPrivateFieldSet(this, _Maze_hasWatched, false, "f");
-        for (let x = 0; x < __classPrivateFieldGet(this, _Maze_width, "f"); ++x) {
+        __classPrivateFieldSet(this, _generated, false);
+        __classPrivateFieldSet(this, _cellGrid, []);
+        __classPrivateFieldSet(this, _visitedCells, []);
+        __classPrivateFieldSet(this, _cellPath, []);
+        __classPrivateFieldSet(this, _hasWatched, false);
+        for (let x = 0; x < __classPrivateFieldGet(this, _width); ++x) {
             let column = [];
-            for (let y = 0; y < __classPrivateFieldGet(this, _Maze_height, "f"); ++y) {
+            for (let y = 0; y < __classPrivateFieldGet(this, _height); ++y) {
                 column.push({
                     up: false,
                     down: false,
@@ -72,17 +74,17 @@ class Maze {
                     right: false
                 });
             }
-            __classPrivateFieldGet(this, _Maze_cellGrid, "f").push(column);
+            __classPrivateFieldGet(this, _cellGrid).push(column);
         }
-        const startCell = [randInt(__classPrivateFieldGet(this, _Maze_width, "f")), randInt(__classPrivateFieldGet(this, _Maze_height, "f"))];
-        __classPrivateFieldGet(this, _Maze_cellPath, "f").push(startCell);
-        __classPrivateFieldGet(this, _Maze_visitedCells, "f").push(startCell);
+        const startCell = [randInt(__classPrivateFieldGet(this, _width)), randInt(__classPrivateFieldGet(this, _height))];
+        __classPrivateFieldGet(this, _cellPath).push(startCell);
+        __classPrivateFieldGet(this, _visitedCells).push(startCell);
     }
     stepGenerator(ignorePause = false) {
-        if (__classPrivateFieldGet(this, _Maze_generated, "f") || (this.paused && !ignorePause)) {
+        if (__classPrivateFieldGet(this, _generated) || (this.paused && !ignorePause)) {
             return;
         }
-        const currentHead = __classPrivateFieldGet(this, _Maze_cellPath, "f")[__classPrivateFieldGet(this, _Maze_cellPath, "f").length - 1];
+        const currentHead = __classPrivateFieldGet(this, _cellPath)[__classPrivateFieldGet(this, _cellPath).length - 1];
         const x = currentHead[0], y = currentHead[1];
         const adjacentCoords = [
             [x - 1, y],
@@ -92,30 +94,30 @@ class Maze {
         ];
         const adjacentCells = [];
         for (const cell of adjacentCoords) {
-            if (cell[0] >= 0 && cell[0] < __classPrivateFieldGet(this, _Maze_width, "f") && cell[1] >= 0 && cell[1] < __classPrivateFieldGet(this, _Maze_height, "f") &&
-                !arrayContainsPair(__classPrivateFieldGet(this, _Maze_visitedCells, "f"), cell)) {
+            if (cell[0] >= 0 && cell[0] < __classPrivateFieldGet(this, _width) && cell[1] >= 0 && cell[1] < __classPrivateFieldGet(this, _height) &&
+                !arrayContainsPair(__classPrivateFieldGet(this, _visitedCells), cell)) {
                 adjacentCells.push(cell);
             }
         }
         if (adjacentCells.length === 0) {
-            if (this.watchMode && !__classPrivateFieldGet(this, _Maze_hasWatched, "f")) {
+            if (this.watchMode && !__classPrivateFieldGet(this, _hasWatched)) {
                 this.paused = true;
                 pauseButton.html("Unpause");
-                __classPrivateFieldSet(this, _Maze_hasWatched, true, "f");
+                __classPrivateFieldSet(this, _hasWatched, true);
                 return;
             }
-            __classPrivateFieldGet(this, _Maze_cellPath, "f").pop();
-            if (__classPrivateFieldGet(this, _Maze_cellPath, "f").length === 0) {
-                __classPrivateFieldSet(this, _Maze_generated, true, "f");
+            __classPrivateFieldGet(this, _cellPath).pop();
+            if (__classPrivateFieldGet(this, _cellPath).length === 0) {
+                __classPrivateFieldSet(this, _generated, true);
             }
         }
         else {
-            __classPrivateFieldSet(this, _Maze_hasWatched, false, "f");
+            __classPrivateFieldSet(this, _hasWatched, false);
             const newHead = adjacentCells[randInt(adjacentCells.length)];
-            __classPrivateFieldGet(this, _Maze_visitedCells, "f").push(newHead);
-            __classPrivateFieldGet(this, _Maze_cellPath, "f").push(newHead);
-            const currentHeadDisplay = __classPrivateFieldGet(this, _Maze_cellGrid, "f")[currentHead[0]][currentHead[1]];
-            const newHeadDisplay = __classPrivateFieldGet(this, _Maze_cellGrid, "f")[newHead[0]][newHead[1]];
+            __classPrivateFieldGet(this, _visitedCells).push(newHead);
+            __classPrivateFieldGet(this, _cellPath).push(newHead);
+            const currentHeadDisplay = __classPrivateFieldGet(this, _cellGrid)[currentHead[0]][currentHead[1]];
+            const newHeadDisplay = __classPrivateFieldGet(this, _cellGrid)[newHead[0]][newHead[1]];
             if (newHead[1] < currentHead[1]) {
                 currentHeadDisplay.up = true;
                 newHeadDisplay.down = true;
@@ -137,17 +139,17 @@ class Maze {
     render() {
         push();
         translate(2, 2);
-        for (let x = 0; x < __classPrivateFieldGet(this, _Maze_cellGrid, "f").length; ++x) {
-            for (let y = 0; y < __classPrivateFieldGet(this, _Maze_cellGrid, "f")[x].length; ++y) {
-                const cell = __classPrivateFieldGet(this, _Maze_cellGrid, "f")[x][y];
-                const top = y * __classPrivateFieldGet(this, _Maze_displayHeight, "f");
-                const bottom = (y + 1) * __classPrivateFieldGet(this, _Maze_displayHeight, "f");
-                const left = x * __classPrivateFieldGet(this, _Maze_displayWidth, "f");
-                const right = (x + 1) * __classPrivateFieldGet(this, _Maze_displayWidth, "f");
+        for (let x = 0; x < __classPrivateFieldGet(this, _cellGrid).length; ++x) {
+            for (let y = 0; y < __classPrivateFieldGet(this, _cellGrid)[x].length; ++y) {
+                const cell = __classPrivateFieldGet(this, _cellGrid)[x][y];
+                const top = y * __classPrivateFieldGet(this, _displayHeight);
+                const bottom = (y + 1) * __classPrivateFieldGet(this, _displayHeight);
+                const left = x * __classPrivateFieldGet(this, _displayWidth);
+                const right = (x + 1) * __classPrivateFieldGet(this, _displayWidth);
                 let fillColor;
                 let coords = [x, y];
-                if (arrayContainsPair(__classPrivateFieldGet(this, _Maze_cellPath, "f"), coords)) {
-                    const head = __classPrivateFieldGet(this, _Maze_cellPath, "f")[__classPrivateFieldGet(this, _Maze_cellPath, "f").length - 1];
+                if (arrayContainsPair(__classPrivateFieldGet(this, _cellPath), coords)) {
+                    const head = __classPrivateFieldGet(this, _cellPath)[__classPrivateFieldGet(this, _cellPath).length - 1];
                     if (head[0] === x && head[1] === y) {
                         fillColor = "#52f75d";
                     }
@@ -155,7 +157,7 @@ class Maze {
                         fillColor = "#ed4545";
                     }
                 }
-                else if (arrayContainsPair(__classPrivateFieldGet(this, _Maze_visitedCells, "f"), coords)) {
+                else if (arrayContainsPair(__classPrivateFieldGet(this, _visitedCells), coords)) {
                     fillColor = "#ffffff";
                 }
                 else {
@@ -163,7 +165,7 @@ class Maze {
                 }
                 noStroke();
                 fill(fillColor);
-                rect(left, top, __classPrivateFieldGet(this, _Maze_displayWidth, "f"), __classPrivateFieldGet(this, _Maze_displayHeight, "f"));
+                rect(left, top, __classPrivateFieldGet(this, _displayWidth), __classPrivateFieldGet(this, _displayHeight));
                 stroke("#000000");
                 strokeWeight(4);
                 if (!cell.up) {
@@ -182,13 +184,13 @@ class Maze {
         }
         pop();
     }
-    get width() { return __classPrivateFieldGet(this, _Maze_width, "f"); }
-    get height() { return __classPrivateFieldGet(this, _Maze_height, "f"); }
-    get displayWidth() { return __classPrivateFieldGet(this, _Maze_displayWidth, "f"); }
-    get displayHeight() { return __classPrivateFieldGet(this, _Maze_displayHeight, "f"); }
-    get generated() { return __classPrivateFieldGet(this, _Maze_generated, "f"); }
+    get width() { return __classPrivateFieldGet(this, _width); }
+    get height() { return __classPrivateFieldGet(this, _height); }
+    get displayWidth() { return __classPrivateFieldGet(this, _displayWidth); }
+    get displayHeight() { return __classPrivateFieldGet(this, _displayHeight); }
+    get generated() { return __classPrivateFieldGet(this, _generated); }
 }
-_Maze_cellGrid = new WeakMap(), _Maze_visitedCells = new WeakMap(), _Maze_cellPath = new WeakMap(), _Maze_width = new WeakMap(), _Maze_height = new WeakMap(), _Maze_displayWidth = new WeakMap(), _Maze_displayHeight = new WeakMap(), _Maze_generated = new WeakMap(), _Maze_hasWatched = new WeakMap();
+_cellGrid = new WeakMap(), _visitedCells = new WeakMap(), _cellPath = new WeakMap(), _width = new WeakMap(), _height = new WeakMap(), _displayWidth = new WeakMap(), _displayHeight = new WeakMap(), _generated = new WeakMap(), _hasWatched = new WeakMap();
 let maze;
 let canvasHovered = true;
 function setup() {
@@ -198,7 +200,8 @@ function setup() {
         .html("Reset")
         .size(100, 50)
         .style("text-align", "center")
-        .style("font-size", "20px");
+        .style("font-size", "20px")
+        .parent("buttonContainer");
     resetButton.mouseClicked(() => {
         maze.reset();
         maze.paused = true;
@@ -208,7 +211,8 @@ function setup() {
         .html("Unpause")
         .size(100, 50)
         .style("text-align", "center")
-        .style("font-size", "20px");
+        .style("font-size", "20px")
+        .parent("buttonContainer");
     pauseButton.mouseClicked(() => {
         maze.paused = !maze.paused;
         if (maze.paused) {
@@ -222,7 +226,8 @@ function setup() {
         .html("Step")
         .size(100, 50)
         .style("text-align", "center")
-        .style("font-size", "20px");
+        .style("font-size", "20px")
+        .parent("buttonContainer");
     stepButton.mouseClicked(() => {
         if (maze.paused) {
             maze.stepGenerator(true);
@@ -232,7 +237,8 @@ function setup() {
         .html("Watch Mode Disabled")
         .size(225, 50)
         .style("text-align", "center")
-        .style("font-size", "20px");
+        .style("font-size", "20px")
+        .parent("buttonContainer");
     watchButton.mouseClicked(() => {
         maze.watchMode = !maze.watchMode;
         if (maze.watchMode) {
@@ -251,6 +257,7 @@ function setup() {
     canvas.mousePressed(_mousePressed);
     canvas.mouseReleased(_mouseReleased);
     document.querySelector("canvas").addEventListener("contextmenu", e => e.preventDefault());
+    canvas.parent("sketchContainer");
 }
 function draw() {
     maze.stepGenerator();

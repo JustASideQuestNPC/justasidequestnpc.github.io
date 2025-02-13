@@ -121,7 +121,7 @@
 
       a {
         color: var(--light-purple);
-
+        font-weight: 500;
         text-decoration: underline;
         text-decoration-thickness: 2px;
         text-decoration-color: var(--transparent);
@@ -136,50 +136,41 @@
 
       b {
         color: var(--light-blue);
-        font-weight: 550;
+        font-weight: 500;
       }
     </style>
 
-    <script src="build/build.js"></script>
+    <script src="/muc282/lab2/build/build.js"></script>
 
   </head>
-  <body>
+  <body data-root="/muc282/lab2">
     <a class="back-to-home" href="../../index.html">back to home</a>
 
     <!-- Main Project Code -->
     <div class="canvas-container" id="sketchContainer"></div>
     <div id="buttonContainer"></div>
 
-    <h3 style="margin-top: 15px;"><a href="https://github.com/JustASideQuestNPC/muc282-lab1" 
+    <h3 style="margin-top: 15px;"><a href="https://github.com/JustASideQuestNPC/muc282-lab2" 
                                      target="_blank" rel="noopener noreferrer">
       source<span style="color:var(--dark-gray);">_</span>code</a></h3>
 
     <h3>read<span style="color:var(--dark-gray)">_</span>me</h3>
     <div class="description">
-      <p>This was the first project in this class. The maze generator uses
-        <a href="https://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking"
-           target="_blank" rel="noopener noreferrer">
-          Recursive Backtracking
-        </a>, which works like this:</p>
-      <ol>
-        <li>Start with a grid of unconnected cells.</li>
-        <li>Choose a random cell to start with. That cell is now the start of the "path".</li>
-        <li>Look at each cell that's adjacent to the last cell in the path.</li>
-        <li>If any of the adjacent cells aren't already part of the maze, choose a random one,
-            carve into it, and add it to the end of the path.</li>
-        <li>If all the cells are already part of the maze, step backward to the previous cell in the
-            path.</li>
-        <li>Repeat steps 3-5 until you step all the way back to the very start of the path.</li>
-      </ol>
+      <p>The second project for this class. A simple function that uses some image masking to draw a
+         moon.</p>
     </div>
 
     <h3>stats</h3>
     <div class="stats">
       <ul>
-        <li>Language: <b>Typescript</b></li>
-        <li>Size: <b>432</b> lines across <b>1</b> file</li>
-        <li>First Commit: <b>1/13/2025</b></li>
-        <li>Last Commit: <b>1/30/2025</b></li>
+        <li>Language:
+          <a href="https://www.typescriptlang.org/" target="_blank" rel="noopener noreferrer">
+            Typescript
+          </a>
+        </li>
+        <li>Size: <b>155</b> lines across <b>1</b> file</li>
+        <li>First Commit: <b>2/11/2025</b></li>
+        <li>Last Commit: <b>2/13/2025</b></li>
         <li>Finished: <b>True</b></li>
       </ul>
     </div>

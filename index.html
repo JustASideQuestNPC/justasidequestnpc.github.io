@@ -73,6 +73,13 @@
         border-radius: 10px;
         padding: 7px 15px 7px 15px;
         background-color: var(--black);
+        flex-direction: column;
+      }
+
+      .dropdown-link-container {
+        flex: 1;
+        margin-top: 5px;
+        margin-bottom: 5px;
       }
 
       .dropdown-content a {
@@ -118,7 +125,12 @@
     <div class="link-dropdown" id="muc282">
       <a class="dropdown-activator", href="#", onclick="toggleDropdown('muc282')">MUC 282</a>
       <div class="dropdown-content">
-        <a href="muc282/lab1/muc282-lab1.html">Project 0: Design on the Web</a>
+        <div class="dropdown-link-container">
+          <a href="muc282/lab1/index.html">Project 0: Design on the Web</a>
+        </div>
+        <div class="dropdown-link-container">
+          <a href="muc282/lab2/index.html">Project 1: Moon Challenge</a>
+        </div>
       </div>
     </div>
   </body>

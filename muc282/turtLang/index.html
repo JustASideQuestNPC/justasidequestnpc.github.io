@@ -45,14 +45,38 @@
         margin: 15px 30px 50px 30px;
       }
 
-      .canvas-container {
+      .main-container {
         margin: 5px 0px;
+        flex-direction: column;
+        /* display: inline-flex; */
       }
 
-      .button-container {
-        margin-bottom: 5px
+      .canvas {
+        margin-right: 10px;
       }
 
+      button {
+        margin-left: 5px;
+        padding: 0px 10px;
+        align-content: center;
+      }
+
+      input[type="file"] {
+        margin-left: 0px;
+        margin-right: 10px;
+        padding: 0px 10px;
+        color: var(--white);
+      }
+
+      .ui-container {
+        margin-top: 5px;
+        padding: 5px 5px;
+        flex-direction: row;
+        display: inline-flex;
+        font-size: 1.5rem;
+        font-family:'Courier New', Courier, monospace;
+      }
+      
       .back-to-home {
         color: var(--light-purple);
         font-family: "Source Code Pro", monospace;
@@ -140,24 +164,28 @@
       }
     </style>
 
-    <script src="/muc282/lab2/build/build.js"></script>
+    <script src="js_build/src/main.js" type="module"></script>
 
   </head>
-  <body data-root="/muc282/lab2">
+  <body data-root="/">
     <a class="back-to-home" href="../../index.html">back<span style="color:var(--dark-gray);">_</span>to<span style="color:var(--dark-gray);">_</span>home</a>
 
     <!-- Main Project Code -->
-    <div class="canvas-container" id="sketchContainer"></div>
-    <div id="buttonContainer"></div>
-
-    <h3 style="margin-top: 15px;"><a href="https://github.com/JustASideQuestNPC/muc282-lab2" 
+    <div class="main-container">
+      <div class="canvas" id="sketchContainer"></div>
+      <div class="ui-container">
+        <button id="runCodeLine">Run</button>
+        <input type="file" id="codeFile" accept=".turt,.txt">
+      </div>
+    </div>
+    <h3 style="margin-top: 15px;"><a href="https://github.com/JustASideQuestNPC/turt-lang" 
                                      target="_blank" rel="noopener noreferrer">
       source<span style="color:var(--dark-gray);">_</span>code</a></h3>
 
     <h3>read<span style="color:var(--dark-gray)">_</span>me</h3>
     <div class="description">
-      <p>The second project for this class. A simple function that uses some image masking to draw a
-         moon.</p>
+      <p>The final for this class, which I (as usual) went way overboard on. An interpreter for a
+         custom(ish) language that controls a turtle.</p>
     </div>
 
     <h3>stats</h3>
@@ -168,9 +196,6 @@
             Typescript
           </a>
         </li>
-        <!-- <li>Size: <b>155</b> lines across <b>1</b> file</li> -->
-        <!-- <li>First Commit: <b>2/11/2025</b></li>
-        <li>Last Commit: <b>2/13/2025</b></li> -->
         <li>Finished: <b>True</b></li>
       </ul>
     </div>
